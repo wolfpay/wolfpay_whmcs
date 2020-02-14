@@ -154,7 +154,7 @@ $type = 'all';
 $out_trade_no = $params['invoiceid'];
 
 //异步通知地址
-$notify_url = 'https://'.$_SERVER['HTTP_HOST'].'/modules/gateways/wolfpay/callback_wxpay.php';
+$notify_url = 'https://'.$_SERVER['HTTP_HOST'].'/modules/gateways/wolfpay/callback.php';
 
 //回调通知地址
 $return_url = $params['returnurl'];
