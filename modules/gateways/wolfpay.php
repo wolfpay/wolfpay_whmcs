@@ -26,7 +26,7 @@ function ensy($data, $key) {
 function base64url_encode($data) {
     return rtrim(strtr(base64_encode($data) , '+/', '-_') , '=');
 }
-class Pays
+class Pay
 {
     private $pid;
     private $key;
@@ -66,7 +66,7 @@ class Pays
         $keys = ensy($string, $this->pid);
         $keyss = base64url_encode($this->pid . '-' . $keys);
         $sign = substr(ensy($keyss, $this->key) , 0, 15);
-        return 'https://' . $this->url . '/submit?skey=' . $keyss . '&sign=' . $sign . '&sign_type=MD5';
+        return 'https://' . $this->api . '/submit?skey=' . $keyss . '&sign=' . $sign . '&sign_type=MD5';
     }
 
     /**
@@ -145,7 +145,7 @@ function wolfpay_config() {
 function wolfpay_link($params) {
     if($_REQUEST['alipaysubmit'] == 'yes'){
 	
-	   $pay = new Pays($params['mchid'], $params['key'], $params['api']);
+	   $pay = new Pay($params['mchid'], $params['key'], $params['api']);
 
 //支付方式
 $type = 'all';
