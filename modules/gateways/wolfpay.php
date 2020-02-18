@@ -26,7 +26,7 @@ function ensy($data, $key) {
 function base64url_encode($data) {
     return rtrim(strtr(base64_encode($data) , '+/', '-_') , '=');
 }
-class Pay
+class Pays
 {
     private $pid;
     private $key;
