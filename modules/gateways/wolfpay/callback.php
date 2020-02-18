@@ -9,7 +9,7 @@ $gatewaymodule = "wolfpay";
 $GATEWAY       = getGatewayVariables($gatewaymodule);
 
 if (!$GATEWAY["type"]) die("fail");
-$pay = new Pays($GATEWAY['mchid'], $GATEWAY['key'], $GATEWAY['api']);
+$pay = new Pay($GATEWAY['mchid'], $GATEWAY['key'], $GATEWAY['api']);
 
 $data = $_GET;
 
