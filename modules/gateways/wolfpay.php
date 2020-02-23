@@ -194,22 +194,15 @@ $url = $pay->submit($type, $out_trade_no, $notify_url, $return_url, $name, $mone
 }
 function wolfpay_refund($params)
 {
-   $pay = new Pay($params['mchid'], $params['key'], $params['api']);
+$pay = new Pay($params['mchid'], $params['key'], $params['api']);
 
 //订单号
 $trade_no = $params['transid'];
 
 //发起支付
-$url = $pay->submit($trade_no);
-//init curl
-$ch = curl_init();
-//curl_setopt可以設定curl參數
-//設定url
-curl_setopt($ch , CURLOPT_URL , $url);
+$url = $pay->refund($trade_no);
 //執行，並將結果存回
-$result = curl_exec($ch);
-//關閉連線
-curl_close($ch);
+$result = file_get_contents($url)
 $arr=json_decode($result, true);
 	if($arr['code']=='1'){
     return array(
