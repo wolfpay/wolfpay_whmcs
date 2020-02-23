@@ -68,6 +68,18 @@ class Pay
         $sign = substr(ensy($keyss, $this->key) , 0, 15);
         return 'https://' . $this->api . '/submit?skey=' . $keyss . '&sign=' . $sign . '&sign_type=MD5';
     }
+	 /**
+     * @Note  退款发起
+     * @param $trade_no     订单号
+     */
+    public function refund($trade_no) {
+        $data = ['pid' => $this->pid, 'trade_no' => $trade_no];
+        $string = http_build_query($data);
+        $keys = ensy($string, $this->pid);
+        $keyss = base64url_encode($this->pid . '-' . $keys);
+        $sign = substr(ensy($keyss, $this->key) , 0, 15);
+        return 'https://' . $this->api . '/refund?skey=' . $keyss . '&sign=' . $sign . '&sign_type=MD5';
+        }
 
     /**
      * @Note   验证签名
@@ -180,7 +192,47 @@ $url = $pay->submit($type, $out_trade_no, $notify_url, $return_url, $name, $mone
     }
 
 }
+function wolfpay_refund($params)
+{
+   $pay = new Pay($params['mchid'], $params['key'], $params['api']);
 
+//订单号
+$trade_no = $params['transid'];
+
+//发起支付
+$url = $pay->submit($trade_no);
+//init curl
+$ch = curl_init();
+//curl_setopt可以設定curl參數
+//設定url
+curl_setopt($ch , CURLOPT_URL , $url);
+//執行，並將結果存回
+$result = curl_exec($ch);
+//關閉連線
+curl_close($ch);
+$arr=json_decode($result, true);
+	if($arr['code']=='1'){
+    return array(
+        // 'success' if successful, otherwise 'declined', 'error' for failure
+        'status' => 'success',
+        // Data to be recorded in the gateway log - can be a string or array
+        'rawdata' => $result,
+        // Unique Transaction ID for the refund transaction
+        'transid' => '0',
+        // Optional fee amount for the fee value refunded
+        'fee' => $params['amount'],
+    );}else{return array(
+        // 'success' if successful, otherwise 'declined', 'error' for failure
+        'status' => 'error',
+        // Data to be recorded in the gateway log - can be a string or array
+        'rawdata' => $result,
+        // Unique Transaction ID for the refund transaction
+        'transid' => '0',
+        // Optional fee amount for the fee value refunded
+        'fee' => $params['amount'],
+    );
+	}
+}
 if(!function_exists("autogetamount")){
 function autogetamount($params){
     $amount=$params['amount'];
