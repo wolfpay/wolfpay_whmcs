@@ -202,7 +202,7 @@ $trade_no = $params['transid'];
 //发起支付
 $url = $pay->refund($trade_no);
 //執行，並將結果存回
-$result = file_get_contents($url)
+$result = file_get_contents($url);
 $arr=json_decode($result, true);
 	if($arr['code']=='1'){
     return array(
